@@ -47,6 +47,7 @@ export const register = async (req:express.Request,res:express.Response) =>{
             return res.sendStatus(400);
         }
 
+    
         const salt = random();
         const user = await createUser({
             email,
