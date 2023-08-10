@@ -1,6 +1,9 @@
 import { createUser, getUserByEmail } from '../db/user';
 import express from 'express'
 import { authentication, random } from '../helpers';
+import jwt from "jsonwebtoken";
+
+
 export const login = async (req:express.Request,res:express.Response)=>{
     try {
         const {email,password} = req.body;
@@ -20,7 +23,7 @@ export const login = async (req:express.Request,res:express.Response)=>{
         if(user.authentication.password !== expectedHash){
             return res.sendStatus(403);
         }
-
+      
         const salt = random();
         user.authentication.sessionToken = authentication(salt,user._id.toString());
 
@@ -34,6 +37,8 @@ export const login = async (req:express.Request,res:express.Response)=>{
         return res.sendStatus(400);
     }
 }
+
+
 export const register = async (req:express.Request,res:express.Response) =>{
     try {
         const {email , password , username} = req.body;
@@ -47,7 +52,7 @@ export const register = async (req:express.Request,res:express.Response) =>{
             return res.sendStatus(400);
         }
 
-    
+       
         const salt = random();
         const user = await createUser({
             email,
@@ -58,6 +63,7 @@ export const register = async (req:express.Request,res:express.Response) =>{
             },
         });
 
+
        return res.status(200).json(user).end();
     }  catch (error) {
         console.log(error);
@@ -65,3 +71,31 @@ export const register = async (req:express.Request,res:express.Response) =>{
     }
 
 }
+
+export const profile =(req:express.Request,res:express.Response)=>{
+    jwt.sign(
+        { user: req.user },
+        "secretKey",
+        { expiresIn: "1h" },
+        (err, token) => {
+          if (err) {
+            return res.json({
+              token: null,
+            });
+          }
+          res.json({
+            token,
+          });
+        }
+    )
+    
+    
+    }
+        
+
+export const callback = (req:express.Request,res:express.Response)=>{
+    res.send("Welcome")
+}
+
+
+

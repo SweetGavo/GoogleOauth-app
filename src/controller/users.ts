@@ -1,5 +1,6 @@
 import express from 'express';
 
+
 import { deleteUserById, getUser, getuserById } from '../db/user';
 
 export const getAllUsers = async (req: express.Request, res: express.Response) => {
@@ -46,3 +47,4 @@ export const updateUser = async (req: express.Request, res: express.Response) =>
     return res.sendStatus(400);
   }
 }
+

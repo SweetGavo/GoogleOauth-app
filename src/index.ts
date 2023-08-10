@@ -6,6 +6,15 @@ import compression from "compression"
 import cors from "cors"
 import mongoose from "mongoose"
 import router from "./router"
+import dotenv from "dotenv"
+import passport from "passport"
+import { passportConfig } from "config/passportConfig"
+import jwt from 'jsonwebtoken';
+
+passportConfig(passport)
+
+
+dotenv.config();
 
 const app = express();
 
